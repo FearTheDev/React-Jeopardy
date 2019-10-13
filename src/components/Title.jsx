@@ -1,26 +1,38 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {setUsername} from '../store/actions/jeopardyStatsActions';
+import {connect} from 'react-redux';
 
 import '../styles/title.scss';
 
-const Title = props =>{
+const Title = ({match, history, username, usernameValid, setUsername}) =>{
 
-    const [username, setUsername] = useState('');
+    useEffect(() =>{
+        if(usernameValid){
+            history.push(`${match.url}categories`);
+        }
+    }, [usernameValid, match.url, history]);
+
+
+    const [usernameField, setUsernameField] = useState('');
 
     const onChangeHandler = e =>{
-        setUsername(e.target.value);
+        setUsernameField(e.target.value);
     };
 
     const onSubmitHandler = e =>{
         e.preventDefault();
-        alert(username);
+        if(usernameField !== '' && usernameField !== 'Player'){
+            setUsername(usernameField);
+        }
+        setUsernameField('');
     };
 
     return (
         <div className="app-title">
-            <p>If you love to challenge yourself with trivia then this is the perfect application for you. Please enter in a username so that we can get started!</p>
+            <p>{username} if you love to challenge yourself with trivia then this is the perfect application for you. Please enter in a username so that we can get started!</p>
             <form  className="title-form" onSubmit={onSubmitHandler}>
                 <label className="username-input" htmlFor="username">
-                    Username <input type="text" value={username} id="username" name="username" onChange={onChangeHandler} />
+                    Username <input type="text" value={usernameField} id="username" name="username" onChange={onChangeHandler} placeholder="enter username" />
                 </label>
                 <button className="answer-button" type="submit">Start Playing!</button>
             </form>
@@ -28,4 +40,11 @@ const Title = props =>{
     );
 };
 
-export default Title;
+const mapStateToProps = state =>{
+    return {
+        username: state.jeopardyStatsReducer.username,
+        usernameValid: state.jeopardyStatsReducer.usernameValid,
+    };
+};
+
+export default connect(mapStateToProps, {setUsername})(Title);

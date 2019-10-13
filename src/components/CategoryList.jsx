@@ -1,11 +1,24 @@
 import React from 'react';
 
-const CategoryList = props =>{
+import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
+
+const CategoryList = ({categories}) =>{
+
     return (
         <div className="app-category-list">
-            <h2>Categories</h2>
+            {categories.map((category) =>{
+                return(<Link to={`/category/${category.id}`} key={category.id}>{category.title}</Link>);
+            })}
         </div>
     );
 };
 
-export default CategoryList;
+
+const mapStateToProps = state =>{
+    return {
+        categories: state.jeopardyDataReducer.categories,
+    };
+};
+
+export default connect(mapStateToProps, {})(CategoryList);

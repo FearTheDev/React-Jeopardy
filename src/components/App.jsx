@@ -1,13 +1,13 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import {connect} from 'react-redux';
+import { Route} from 'react-router-dom';
 
 import logo from '../logo.svg';
-import Title from './Title';
-import CategoryList from './CategoryList';
+import {Title, CategoryList, Category} from './index';
 
 import '../styles/app.scss';
 
-const App = () => {
+const App = ({usernameValid}) => {
 
   return (
     <div className="app">
@@ -16,20 +16,26 @@ const App = () => {
         <h1><img className="react-logo" src={logo} alt="logo" /> React Jeopardy</h1>
       </div>
 
-      <Switch>
         {/* If the user just opened the application load title screen */}
-        <Route exact path="/">
-          <Title />
-        </Route>
+        <Route exact path="/" render={ props => <Title {...props} /> } />
+
 
         {/* After the user has provided a name to start with then display game categories */}
-        <Route path="/categories">
-          <CategoryList />
+        <Route path="/categories" render ={props => <CategoryList {...props} />} />
+
+        <Route path="/category/:id">
+          <Category />
         </Route>
-      </Switch>
+
     </div>
 
   );
 };
 
-export default App;
+const mapStateToProps = state =>{
+  return{
+    usernameValid: state.jeopardyStatsReducer.usernameValid,
+  };
+};
+
+export default connect(mapStateToProps, {})(App);

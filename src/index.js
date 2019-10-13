@@ -4,14 +4,19 @@ import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 
 // Fun Redux Stuff
-import {createStore, applyMiddleware} from 'redux';
+import {createStore, applyMiddleware, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
-import {jeopardyReducer} from './store/reducers';
+import {jeopardyDataReducer, jeopardyStatsReducer} from './store/reducers';
 import {BrowserRouter as Router} from 'react-router-dom';
 
+const rootReducer = combineReducers({
+    jeopardyDataReducer,
+    jeopardyStatsReducer,
+});
 
-const store = createStore(jeopardyReducer, applyMiddleware(thunk));
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 ReactDOM.render(<Provider store={store}><Router><App /></Router></Provider>, document.getElementById('root'));
 
