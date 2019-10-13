@@ -1,14 +1,14 @@
 import React from 'react';
 
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
+import {CategoryButton} from './';
 
 const CategoryList = ({categories}) =>{
 
     return (
         <div className="app-category-list">
             {categories.map((category) =>{
-                return(<Link to={`/category/${category.id}`} key={category.id}>{category.title}</Link>);
+                return <CategoryButton key={category.id} {...category} />;
             })}
         </div>
     );
